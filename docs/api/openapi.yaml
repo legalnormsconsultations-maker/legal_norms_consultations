@@ -1,0 +1,138 @@
+openapi: 3.1.0
+info:
+  title: Legalnorms Consultations API
+  description: |
+    Enterprise API for accessing global regulatory intelligence, drug data, and document tracking.
+    
+    ## Authentication
+    All requests require a Bearer token passed in the `Authorization` header.
+    
+    ## Rate Limiting
+    Requests are strictly rate-limited based on your subscription tier (default: 100 req/min). 
+    Check the `X-RateLimit-*` headers on responses.
+    
+    ## Pagination
+    List endpoints utilize cursor-based pagination. Pass the `cursor` from the previous response to fetch the next page.
+  version: "1.0.0"
+  contact:
+    name: API Support
+    email: api@legalnorms.com
+
+servers:
+  - url: https://api.legalnorms.com/v1
+    description: Production Environment
+  - url: https://staging-api.legalnorms.com/v1
+    description: Staging Environment
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API_KEY
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          description: A human-readable error code or message.
+          example: "UNAUTHORIZED_ACCESS"
+        details:
+          type: object
+          description: Contextual validation issues.
+          
+    Drug:
+      type: object
+      required:
+        - id
+        - genericName
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        genericName:
+          type: string
+        brandName:
+          type: string
+        status:
+          type: string
+          enum: [APPROVED, INVESTIGATIONAL, WITHDRAWN, UNKNOWN]
+
+paths:
+  /drugs:
+    get:
+      summary: List all monitored drugs
+      operationId: listDrugs
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+            maximum: 100
+        - in: query
+          name: cursor
+          schema:
+            type: string
+            description: Base64 encoded pointer for pagination.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Drug'
+                  next_cursor:
+                    type: string
+        '401':
+          description: Invalid API Key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          
+  /webhooks:
+    post:
+      summary: Register a webhook for regulatory events
+      operationId: registerWebhook
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+                - events
+              properties:
+                url:
+                  type: string
+                  format: uri
+                events:
+                  type: array
+                  items:
+                    type: string
+                    enum: [drug.approved, document.published, authority.alert]
+      responses:
+        '201':
+          description: Webhook registered successfully

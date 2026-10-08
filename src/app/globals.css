@@ -1,26 +1,243 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Centralized Design Token System - Medical Theme */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Sophisticated Healthcare Accent (Trustworthy Blue) */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* Status Colors */
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Neutral Base Surfaces */
+    --background: #f8fafc; /* Slate 50 */
+    --foreground: #0f172a; /* Slate 900 */
+
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+
+    /* Highly Visible Orange Accent */
+    --primary: #f97316; /* Orange 500 */
+    --primary-foreground: #000000; /* Black text for Day Mode */
+
+    --secondary: #f1f5f9; /* Slate 100 */
+    --secondary-foreground: #0f172a;
+
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b; /* Slate 500 */
+
+    --accent: #f1f5f9;
+    --accent-foreground: #0f172a;
+
+    /* Clear Status Colors */
+    --destructive: #ef4444; /* Red 500 */
+    --destructive-foreground: #ffffff;
+
+    --success: #10b981; /* Emerald 500 */
+    --success-foreground: #ffffff;
+
+    --warning: #f59e0b; /* Amber 500 */
+    --warning-foreground: #ffffff;
+
+    --info: #3b82f6; /* Blue 500 */
+    --info-foreground: #ffffff;
+
+    /* Subtle Borders */
+    --border: #e2e8f0; /* Slate 200 */
+    --input: #e2e8f0;
+    --ring: #f97316; /* Orange 500 */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark Mode Support (Future-Proofed) */
+    --background: #020617; /* Slate 950 */
+    --foreground: #f8fafc;
+
+    --card: #0f172a; /* Slate 900 */
+    --card-foreground: #f8fafc;
+
+    --popover: #0f172a;
+    --popover-foreground: #f8fafc;
+
+    --primary: #fb923c; /* Orange 400 */
+    --primary-foreground: #ffffff; /* White text for Night Mode */
+
+    --secondary: #1e293b; /* Slate 800 */
+    --secondary-foreground: #f8fafc;
+
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8; /* Slate 400 */
+
+    --accent: #1e293b;
+    --accent-foreground: #f8fafc;
+
+    --destructive: #7f1d1d; /* Red 900 */
+    --destructive-foreground: #f8fafc;
+
+    --success: #064e3b; /* Emerald 900 */
+    --success-foreground: #f8fafc;
+
+    --warning: #78350f; /* Amber 900 */
+    --warning-foreground: #f8fafc;
+
+    --info: #1e3a8a; /* Blue 900 */
+    --info-foreground: #f8fafc;
+
+    --border: #1e293b;
+    --input: #1e293b;
+    --ring: #fb923c;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .shimmer-text {
+    background: linear-gradient(
+      120deg,
+      currentColor 40%,
+      #f97316 50% /* Saffron */,
+      currentColor 60%
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer-day 9s ease-in-out infinite;
+  }
+
+  .dark .shimmer-text {
+    background: linear-gradient(
+      120deg,
+      currentColor 30%,
+      #fef08a 45% /* Soft yellow */,
+      #facc15 55% /* Golden */,
+      currentColor 70%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer-night 2.5s linear infinite;
+  }
+
+  @keyframes shimmer-day {
+    0% {
+      background-position: 200% 0;
+    }
+    11% {
+      background-position: -100% 0;
+    }
+    11.01% {
+      background-position: 200% 0;
+    }
+    22% {
+      background-position: -100% 0;
+    }
+    22.01% {
+      background-position: 200% 0;
+    }
+    33% {
+      background-position: -100% 0;
+    }
+    33.01%,
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes shimmer-night {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, #f87171, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .text-border {
+    -webkit-text-stroke: 1px black;
+    color: white;
+  }
+
+  /* Override hardcoded SunEditor inline styles in dark mode */
+  .dark .prose [style*="background-color: white"],
+  .dark .prose [style*="background-color: #ffffff"],
+  .dark .prose [style*="background-color: rgb(255, 255, 255)"] {
+    background-color: transparent !important;
+  }
+  
+  .dark .prose [style*="color: black"],
+  .dark .prose [style*="color: #000000"],
+  .dark .prose [style*="color: rgb(0, 0, 0)"] {
+    color: inherit !important;
+  }
 }

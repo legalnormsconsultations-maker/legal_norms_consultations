@@ -1,0 +1,1 @@
+import 'dotenv/config'; import postgres from 'postgres'; const sql = postgres(process.env.DATABASE_URL); sql\SELECT email, avatar_url FROM users LIMIT 1\.then(console.log).finally(() => process.exit(0));

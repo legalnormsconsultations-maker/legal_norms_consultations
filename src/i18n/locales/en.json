@@ -1,0 +1,21 @@
+{
+  "dashboard": {
+    "overview_title": "Dashboard Overview",
+    "overview_subtitle": "Welcome back. Here is your regulatory and portfolio summary.",
+    "monitored_drugs": "Monitored Drugs",
+    "active_alerts": "Active Alerts",
+    "documents_scanned": "Documents Scanned",
+    "portfolio_views": "Portfolio Views",
+    "recent_events": "Recent Regulatory Events",
+    "view_all": "View All"
+  },
+  "errors": {
+    "unexpected": "An unexpected error occurred while fetching this data.",
+    "retry": "Try Again",
+    "retrying": "Retrying..."
+  },
+  "search": {
+    "placeholder": "Search drugs, manufacturers, or documents...",
+    "no_results": "No results found"
+  }
+}

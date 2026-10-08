@@ -1,0 +1,57 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["main", "staging"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  validate:
+    name: Build & Validate Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.x.x
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Code Formatting & Linting (Biome)
+        run: pnpm run lint
+
+      - name: Strict Type Checking
+        run: pnpm run typecheck
+
+      - name: Unit & Integration Tests
+        run: pnpm run test
+
+      - name: Next.js Production Build Validation
+        # This ensures the app can actually compile before allowing a merge
+        run: pnpm run build
+        env:
+          # Inject mock CI environment variables required for build phase
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ci_db"
+          NEXT_PUBLIC_SUPABASE_URL: "https://mock.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "mock-key"
+          SUPABASE_SERVICE_ROLE_KEY: "mock-key"
+          STORAGE_BUCKET_NAME: "mock"
+          STORAGE_REGION: "us-east-1"
+          STORAGE_ACCESS_KEY: "mock"
+          STORAGE_SECRET_KEY: "mock"
+          REDIS_URL: "redis://localhost:6379"
+          EMAIL_PROVIDER_KEY: "mock"
+          EMAIL_FROM_ADDRESS: "ci@legalnorms.com"
+          ENCRYPTION_SECRET_KEY: "mockmockmockmockmockmockmockmock"

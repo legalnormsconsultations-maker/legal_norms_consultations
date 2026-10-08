@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Legalnorms Consultations
 
-## Getting Started
+Enterprise platform for global regulatory intelligence, drug data, and document tracking.
 
-First, run the development server:
+## Developer Onboarding
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project enforces a highly standardized development environment (Requirement 55). 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Prerequisites
+- **OS:** Windows (Native or WSL)
+- **IDE:** Visual Studio Code
+- **Node:** v20+
+- **Package Manager:** `pnpm` v11+ (Strictly enforced. **Do not use npm or yarn.**)
+- **Formatting:** Biome (Install the VS Code Biome extension)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Standardized Commands
+All engineering tasks must map to these standardized `pnpm` commands:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+|---|---|
+| `pnpm install` | Install all dependencies cleanly using the lockfile. |
+| `pnpm dev` | Start the local Next.js development server on `localhost:3000`. |
+| `pnpm build` | Compile a highly-optimized, standalone production build. |
+| `pnpm start` | Run the compiled production server. |
+| `pnpm lint` | Run Biome linting checks. |
+| `pnpm format` | Run Biome auto-formatting across the codebase. |
+| `pnpm typecheck` | Run a strict TypeScript compiler check (`tsc --noEmit`). |
+| `pnpm test` | Execute the Vitest unit, integration, and security test suites. |
+| `pnpm db:generate` | Generate Drizzle SQL migrations based on changes in `src/db/schema.ts`. |
+| `pnpm db:migrate` | Apply pending SQL migrations to the connected PostgreSQL database. |
+| `pnpm db:seed` | Seed the database with required standard taxonomies (mock drugs, roles, etc.). |
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture & System Rules
+Before contributing code, you **must** read the following architectural contracts:
+1. `SYSTEM_REQUIREMENTS.md` - The 55 master rules governing this platform.
+2. `docs/PAGE_ARCHITECTURE.md` - The UI and RBAC plans for all 30 core pages.
+3. `docs/DIRECTORY_STRUCTURE.md` - The Modular Monolith boundaries.
+4. `docs/ARCHITECTURE_DECISIONS.md` - ADRs regarding future microservice extractions.
